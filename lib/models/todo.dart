@@ -1,4 +1,3 @@
-
 import 'package:riverpod/riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -24,14 +23,12 @@ class Todo {
   }
 }
 
-
 /// An object that controls a list of [Todo].
 class TodoList extends Notifier<List<Todo>> {
+
   @override
   List<Todo> build() => [
-        const Todo(id: 'todo-0', description: 'Buy cookies'),
-        const Todo(id: 'todo-1', description: 'Star Riverpod'),
-        const Todo(id: 'todo-2', description: 'Have a walk'),
+    
       ];
 
   void add(String description) {
@@ -74,5 +71,9 @@ class TodoList extends Notifier<List<Todo>> {
 
   void remove(Todo target) {
     state = state.where((todo) => todo.id != target.id).toList();
+  }
+
+  void init(List<Todo> todos) {
+    state = [...todos];
   }
 }

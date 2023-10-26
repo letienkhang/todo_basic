@@ -4,9 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_basic/common/constants.dart';
 import 'package:todo_basic/providers/todo_provider.dart';
+import 'package:todo_basic/utils/time_util.dart';
 import 'package:todo_basic/widgets/home_title.dart';
 import 'package:todo_basic/widgets/home_toobar.dart';
 import 'package:todo_basic/widgets/todo_item.dart';
+
+import '../widgets/home_2sd_title.dart';
 
 class Home extends HookConsumerWidget {
   const Home({super.key});
@@ -15,13 +18,20 @@ class Home extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(filteredTodos);
     final newTodoController = useTextEditingController();
+    final greeting = ref.watch(getGreetingProvider);
+    // final todos = ref.watch(todosProvider);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
           children: [
-            const HomeTitle(),
+            const SizedBox(height: 32),
+            HomeTitle(
+              greeting: greeting,
+            ),
+            const Home2SDTitle(),
+            const SizedBox(height: 12),
             TextField(
               key: addTodoKey,
               controller: newTodoController,

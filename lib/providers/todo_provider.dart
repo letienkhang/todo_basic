@@ -1,5 +1,5 @@
-
 // Creates a [TodoList] and initialise it with pre-defined values.
+import 'package:hive/hive.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:todo_basic/enums/filter_task_enum.dart';
 import 'package:todo_basic/models/todo.dart';
@@ -17,7 +17,7 @@ final todoListProvider = NotifierProvider<TodoList, List<Todo>>(TodoList.new);
 final filteredTodos = Provider<List<Todo>>((ref) {
   final filter = ref.watch(todoListFilter);
   final todos = ref.watch(todoListProvider);
-
+  // final todoHive = ref.watch(todosProvider);
   switch (filter) {
     case TodoListFilter.completed:
       return todos.where((todo) => todo.completed).toList();
@@ -28,9 +28,24 @@ final filteredTodos = Provider<List<Todo>>((ref) {
   }
 });
 
-
 final uncompletedTodosCount = Provider<int>((ref) {
   return ref.watch(todoListProvider).where((todo) => !todo.completed).length;
 });
 
 final currentTodo = Provider<Todo>((ref) => throw UnimplementedError());
+
+final todoBoxProvider = FutureProvider<Box<Todo>>((ref) async {
+  final box = await Hive.openBox<Todo>('todos');
+  return box;
+});
+
+final todosProvider = Provider<List<Todo>>((ref) {
+  final boxAsync = ref.watch(todoBoxProvider);
+
+  if (boxAsync.asData != null) {
+    final box = boxAsync.asData!.value;
+    return box.values.toList();
+  } else {
+    return []; // Hoặc xử lý khác tùy theo trường hợp
+  }
+});
