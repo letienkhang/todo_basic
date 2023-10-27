@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_basic/models/todo.dart';
@@ -27,10 +24,7 @@ void main() async {
   }
 
   final container = ProviderContainer();
-
   container.read(todoListProvider.notifier).init(list);
-
-  //box.addAll(list);
   runApp(ProviderScope(parent: container, child: const MyApp()));
 }
 
